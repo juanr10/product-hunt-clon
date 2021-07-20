@@ -78,10 +78,10 @@ const Header = () => {
                         ) : 
                         (
                             <>
-                                <Link href="/" passHref>
+                                <Link href="/login" passHref>
                                     <Button bgColor="true">Login</Button>
                                 </Link>
-                                <Link href="/d" passHref>
+                                <Link href="/new-account" passHref>
                                     <Button>Create account</Button>
                                 </Link>
                             </>

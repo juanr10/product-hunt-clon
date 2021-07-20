@@ -31,7 +31,6 @@ const Logo = styled.p`
 const Header = () => {
     const user = true;
 
-
     return ( 
         <header
             css={css`

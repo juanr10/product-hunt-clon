@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Router from 'next/router'
 //Styles
 import { css } from '@emotion/react';
 import { Form, Field, Submit, Error } from '../components/ui/Form';
 //Components
 import Layout from '../components/layout/Layout';
-
+//Firebase
+import firebase from '../firebase';
 //Validations
 import useValidation from '../hooks/useValidation';
 import validateNewAccount from '../validations/validateNewAccount';
+
 const INITIAL_STATE = {
     name: '',
     email: '',
@@ -17,17 +20,23 @@ const INITIAL_STATE = {
 const NewAccount = () => {
     //Custom hook
     const { values, errors, submitForm, handleChange, handleSubmit, handleBlur } = useValidation(INITIAL_STATE, validateNewAccount, createNewAccount);
-
     const { name, email, password } = values;
+    const [error, setError] = useState(false);
 
     /**
      * @name: createNewAccount.
-     * @description: updates the state (values) with the data entered by the user.
-     * @param: event.
+     * @description: creates asynchronously a new user in Firebase. 
+     * @param: none.
      * @return: none.
     */
-    function createNewAccount() {
-        console.log("heyyyyy");
+    async function createNewAccount() {
+        try {
+            await firebase.register(name, email, password);
+            Router.push('/');
+        } catch (error) {
+            console.error('There has been an error creating the account, please try again later.', error.message);
+            setError(error.message);
+        } 
     }
 
     return (
@@ -60,6 +69,8 @@ const NewAccount = () => {
                     </Field>
 
                     { errors.password && <Error>{errors.password}</Error> }
+
+                    { error && <Error>{error}</Error> }
 
                     <Submit type="submit" value="Create account" />
                 </Form>

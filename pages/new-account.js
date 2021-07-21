@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Router from 'next/router'
+import Router from 'next/router';
 //Styles
 import { css } from '@emotion/react';
 import { Form, Field, Submit, Error } from '../components/ui/Form';

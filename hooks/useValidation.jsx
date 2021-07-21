@@ -50,12 +50,24 @@ const useValidation = (initialState, validate, fn) => {
         setSubmitForm(true);
     }
 
+    /**
+     * @name: handleBlur.
+     * @description: checks for errors when the event blur is created.
+     * @param: none.
+     * @return: none.
+    */
+    const handleBlur = () => {
+        const validationErrors = validate(values);
+        setErrors(validationErrors);
+    }
+
     return {
         values,
         errors,
         submitForm,
         handleChange,
         handleSubmit,
+        handleBlur
     };
 }
  

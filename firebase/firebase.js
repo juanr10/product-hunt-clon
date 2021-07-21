@@ -30,7 +30,7 @@ class Firebase {
      * @name: login.
      * @description: logs the user in using Firebase methods. 
      * @param: email & password.
-     * @return: none.
+     * @return: user's data.
     */
     async login(email, password) {
         return await this.auth.signInWithEmailAndPassword(email, password);

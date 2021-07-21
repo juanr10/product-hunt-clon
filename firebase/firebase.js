@@ -25,6 +25,16 @@ class Firebase {
             displayName: name
         });
     }
+
+    /**
+     * @name: login.
+     * @description: logs the user in using Firebase methods. 
+     * @param: email & password.
+     * @return: none.
+    */
+    async login(email, password) {
+        return await this.auth.signInWithEmailAndPassword(email, password);
+    }
 }
 
 const firebase = new Firebase();

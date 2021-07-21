@@ -1,7 +1,8 @@
 import app from 'firebase/app';
 import firebaseConfig from './config';
 import 'firebase/auth';
-
+import 'firebase/firestore';
+import 'firebase/storage';
 class Firebase {
     constructor() {
         if (!app.apps.length) {
@@ -10,6 +11,10 @@ class Firebase {
 
         //Get access to auth methods
         this.auth = app.auth();
+        //Get access to DB methods
+        this.db = app.firestore();
+        //Get access to storage methods
+        this.storage = app.storage();
     }
 
     /**

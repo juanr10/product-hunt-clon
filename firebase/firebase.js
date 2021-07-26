@@ -1,56 +1,59 @@
-import app from 'firebase/app';
-import firebaseConfig from './config';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'firebase/storage';
+import app from 'firebase/app'
+import firebaseConfig from './config'
+import 'firebase/auth'
+import 'firebase/firestore'
+import 'firebase/storage'
 class Firebase {
-    constructor() {
-        if (!app.apps.length) {
-            app.initializeApp(firebaseConfig);
-        }
-
-        //Get access to auth methods
-        this.auth = app.auth();
-        //Get access to DB methods
-        this.db = app.firestore();
-        //Get access to storage methods
-        this.storage = app.storage();
+  constructor() {
+    if (!app.apps.length) {
+      app.initializeApp(firebaseConfig)
     }
 
-    /**
-     * @name: register.
-     * @description: creates asynchronously a new user using Firebase methods. 
-     * @param: name, email & password.
-     * @return: none.
-    */
-    async register(name, email, password) {
-        const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
+    // Get access to auth methods
+    this.auth = app.auth()
+    // Get access to DB methods
+    this.db = app.firestore()
+    // Get access to storage methods
+    this.storage = app.storage()
+  }
 
-        return await newUser.user.updateProfile({
-            displayName: name
-        });
-    }
+  /**
+   * @name: register.
+   * @description: creates asynchronously a new user using Firebase methods.
+   * @param: name, email & password.
+   * @return: none.
+   */
+  async register(name, email, password) {
+    const newUser = await this.auth.createUserWithEmailAndPassword(
+      email,
+      password
+    )
 
-    /**
-     * @name: login.
-     * @description: logs the user in using Firebase methods. 
-     * @param: email & password.
-     * @return: user's data.
-    */
-    async login(email, password) {
-        return await this.auth.signInWithEmailAndPassword(email, password);
-    }
+    return await newUser.user.updateProfile({
+      displayName: name
+    })
+  }
 
-    /**
-     * @name: logout.
-     * @description: logs out the user using Firebase methods. 
-     * @param: none.
-     * @return: none.
-    */
-    async logout() {
-        await this.auth.signOut();
-    }
+  /**
+   * @name: login.
+   * @description: logs the user in using Firebase methods.
+   * @param: email & password.
+   * @return: user's data.
+   */
+  async login(email, password) {
+    return await this.auth.signInWithEmailAndPassword(email, password)
+  }
+
+  /**
+   * @name: logout.
+   * @description: logs out the user using Firebase methods.
+   * @param: none.
+   * @return: none.
+   */
+  async logout() {
+    await this.auth.signOut()
+  }
 }
 
-const firebase = new Firebase();
-export default firebase;
+const firebase = new Firebase()
+export default firebase

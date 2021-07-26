@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 /**
  * @name: useValidation.
@@ -7,68 +7,68 @@ import React, { useState, useEffect } from 'react';
  * @return: values, errors and submitForm state values and handleChange & handleSubmit functions.
  */
 const useValidation = (initialState, validate, fn) => {
-    const [values, setValues] = useState(initialState);
-    const [errors, setErrors] = useState({});
-    const [submitForm, setSubmitForm] = useState(false);
+  const [values, setValues] = useState(initialState)
+  const [errors, setErrors] = useState({})
+  const [submitForm, setSubmitForm] = useState(false)
 
-    useEffect(() => {
-        if (submitForm) {
-            const noErrors = Object.keys(errors).length === 0;
+  useEffect(() => {
+    if (submitForm) {
+      const noErrors = Object.keys(errors).length === 0
 
-            if (noErrors) {
-                fn();
-            }
+      if (noErrors) {
+        fn()
+      }
 
-            setSubmitForm(false);
-        }
-    }, [errors]);
-
-    /**
-     * @name: handleChange.
-     * @description: updates the state (values) with the data entered by the user.
-     * @param: event.
-     * @return: none.
-    */
-    const handleChange = e => {
-        setValues({
-            ...values,
-            [e.target.name] : e.target.value
-        });
+      setSubmitForm(false)
     }
+  }, [errors])
 
-    /**
-     * @name: handleSubmit.
-     * @description: checks for errors in the data entered by the user & update the state (errors & submitForm).
-     * @param: event.
-     * @return: none.
-    */
-    const handleSubmit = e => {
-        e.preventDefault();
+  /**
+   * @name: handleChange.
+   * @description: updates the state (values) with the data entered by the user.
+   * @param: event.
+   * @return: none.
+   */
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value
+    })
+  }
 
-        const validationErrors = validate(values);
-        setErrors(validationErrors);
-        setSubmitForm(true);
-    }
+  /**
+   * @name: handleSubmit.
+   * @description: checks for errors in the data entered by the user & update the state (errors & submitForm).
+   * @param: event.
+   * @return: none.
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-    /**
-     * @name: handleBlur.
-     * @description: checks for errors when the event blur is created.
-     * @param: none.
-     * @return: none.
-    */
-    const handleBlur = () => {
-        const validationErrors = validate(values);
-        setErrors(validationErrors);
-    }
+    const validationErrors = validate(values)
+    setErrors(validationErrors)
+    setSubmitForm(true)
+  }
 
-    return {
-        values,
-        errors,
-        submitForm,
-        handleChange,
-        handleSubmit,
-        handleBlur
-    };
+  /**
+   * @name: handleBlur.
+   * @description: checks for errors when the event blur is created.
+   * @param: none.
+   * @return: none.
+   */
+  const handleBlur = () => {
+    const validationErrors = validate(values)
+    setErrors(validationErrors)
+  }
+
+  return {
+    values,
+    errors,
+    submitForm,
+    handleChange,
+    handleSubmit,
+    handleBlur
+  }
 }
- 
-export default useValidation;
+
+export default useValidation

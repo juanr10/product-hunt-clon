@@ -21,13 +21,14 @@ const HeaderContainer = styled.div`
   }
 `
 
-const Logo = styled.p`
+const Logo = styled.a`
   color: var(--orange);
   font-size: 4rem;
   line-height: 0;
   font-family: 'Roboto Slab', serif;
   font-weight: 700;
   margin-right: 2rem;
+  cursor: pointer;
 `
 
 const Header = () => {
@@ -48,7 +49,7 @@ const Header = () => {
             align-items: center;
           `}
         >
-          <Link href="/" passHref>
+          <Link href="/">
             <Logo>P</Logo>
           </Link>
 
@@ -83,10 +84,10 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link href="/login" passHref>
+              <Link href="/login">
                 <Button bgColor="true">Login</Button>
               </Link>
-              <Link href="/new-account" passHref>
+              <Link href="/new-account">
                 <Button>Create account</Button>
               </Link>
             </>

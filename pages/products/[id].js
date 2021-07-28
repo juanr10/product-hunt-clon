@@ -32,6 +32,9 @@ const Product = () => {
   const [product, setProduct] = useState({})
   const [error, setError] = useState(false)
   const [comment, setComment] = useState({})
+  // Flag to avoid unnecessary database queries.
+  const [dbConsult, setDbConsult] = useState(true)
+
   const { firebase, user } = useContext(FirebaseContext)
 
   // Get id
@@ -41,20 +44,22 @@ const Product = () => {
   } = router
 
   useEffect(() => {
-    if (id) {
+    if (id && dbConsult) {
       const getProduct = async () => {
         const productQuery = await firebase.db.collection('products').doc(id)
         const product = await productQuery.get()
         if (product.exists) {
           setProduct(product.data())
+          setDbConsult(false)
         } else {
           setError(true)
+          setDbConsult(false)
         }
       }
 
       getProduct()
     }
-  }, [id, product])
+  }, [id])
 
   // TODO: Add spinner
   if (Object.keys(product).length === 0 && !error) return 'Loading...'
@@ -103,6 +108,8 @@ const Product = () => {
       ...product,
       votes: totalVotes
     })
+
+    setDbConsult(true) // Refresh product data from db
   }
 
   /**
@@ -147,6 +154,8 @@ const Product = () => {
       ...product,
       comments: newComments
     })
+
+    setDbConsult(true) // Refresh product data from db
   }
 
   /**

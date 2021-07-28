@@ -43,22 +43,56 @@ const Product = () => {
 
       getProduct()
     }
-  }, [id])
+  }, [id, product])
 
   // TODO: Add spinner
   if (Object.keys(product).length === 0 && !error) return 'Loading...'
 
   const {
-    comments,
-    created,
-    creator,
+    name,
     description,
     company,
-    name,
     url,
     imageUrl,
-    votes
+    comments,
+    votes,
+    voters,
+    created,
+    creator
   } = product
+
+  /**
+   * @name: vote.
+   * @description: It updates the votes property of the product in the database and also updates the number of votes in product state.
+   * @param: none.
+   * @return: none.
+   */
+  const vote = () => {
+    if (!user) {
+      return router.push('/login')
+    }
+
+    const totalVotes = votes + 1
+
+    // Check if the user has already voted
+    if (voters.includes(user.uid)) {
+      return
+    }
+
+    // Save voter id
+    const newVoters = [...voters, user.uid]
+
+    //DB update
+    firebase.db.collection('products').doc(id).update({
+      votes: totalVotes,
+      voters: newVoters
+    })
+
+    setProduct({
+      ...product,
+      votes: totalVotes
+    })
+  }
 
   return (
     <Layout>
@@ -126,7 +160,7 @@ const Product = () => {
                   margin-top: 5rem;
                 `}
               >
-                {user && <Button>Vote</Button>}
+                {user && <Button onClick={vote}>Vote</Button>}
 
                 <p
                   css={css`

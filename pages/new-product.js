@@ -59,6 +59,7 @@ const NewProduct = () => {
       imageUrl,
       description,
       votes: 0,
+      voters: [],
       comments: [],
       created: Date.now(),
       creator: {

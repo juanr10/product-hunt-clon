@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { FirebaseContext } from '../firebase'
 import Layout from '../components/layout/Layout'
-import Product from '../components/layout/Product'
+import Products from '../components/layout/Products'
 
 export default function Home() {
   const [products, setProducts] = useState([])
@@ -35,7 +35,7 @@ export default function Home() {
           <div className="custom-container">
             <div className="bg-white">
               {products.map((product) => {
-                return <Product key={product.id} product={product} />
+                return <Products key={product.id} product={product} />
               })}
             </div>
           </div>

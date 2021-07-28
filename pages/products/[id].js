@@ -18,9 +18,20 @@ const ProductContainer = styled.div`
   }
 `
 
+const ProductCreator = styled.p`
+  padding: 0.5rem 2rem;
+  background-color: var(--orange);
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+`
+
 const Product = () => {
   const [product, setProduct] = useState({})
   const [error, setError] = useState(false)
+  const [comment, setComment] = useState({})
   const { firebase, user } = useContext(FirebaseContext)
 
   // Get id
@@ -63,7 +74,7 @@ const Product = () => {
 
   /**
    * @name: vote.
-   * @description: It updates the votes property of the product in the database and also updates the number of votes in product state.
+   * @description: updates the votes property of the product in the database and also updates the product votes state.
    * @param: none.
    * @return: none.
    */
@@ -92,6 +103,62 @@ const Product = () => {
       ...product,
       votes: totalVotes
     })
+  }
+
+  /**
+   * @name: commentChange.
+   * @description: updates comment state with the data entered by the user.
+   * @param: event.
+   * @return: none.
+   */
+  const commentChange = (e) => {
+    setComment({
+      ...comment,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  /**
+   * @name: addComment.
+   * @description: updates the comments property of the product in the database and also updates the product comments state.
+   * @param: none.
+   * @return: none.
+   */
+  const addComment = (e) => {
+    e.preventDefault()
+
+    if (!user) {
+      return router.push('/login')
+    }
+
+    //Extra info
+    comment.userId = user.uid
+    comment.userName = user.displayName
+    comment.date = Date.now()
+
+    const newComments = [...comments, comment]
+
+    //DB update
+    firebase.db.collection('products').doc(id).update({
+      comments: newComments
+    })
+
+    setProduct({
+      ...product,
+      comments: newComments
+    })
+  }
+
+  /**
+   * @name: isCreator.
+   * @description: check if the user is the product creator.
+   * @param: event.
+   * @return: none.
+   */
+  const isCreator = (id) => {
+    if (creator.id === id) {
+      return true
+    }
   }
 
   return (
@@ -123,9 +190,13 @@ const Product = () => {
               {user && (
                 <>
                   <h2>Add a comment</h2>
-                  <form>
+                  <form onSubmit={addComment}>
                     <Field>
-                      <input type="text" name="message" />
+                      <input
+                        type="text"
+                        name="message"
+                        onChange={commentChange}
+                      />
                     </Field>
                     <Submit type="submit" value="Add a comment"></Submit>
                   </form>
@@ -139,13 +210,33 @@ const Product = () => {
               >
                 Comments
               </h2>
-              {comments.map((comment) => (
-                <li key={id}>
-                  <p>{comment.name}</p>
-                  <p>{comment.userName}</p>
-                </li>
-              ))}
+
+              {comments.length === 0 ? (
+                'There are no comments yet. Be the first to leave one!'
+              ) : (
+                <ul>
+                  {comments.map((comment, i) => (
+                    <li
+                      key={`${comment.userId}-${i}`}
+                      css={css`
+                        border: 1px solid var(--gray3);
+                        padding: 1rem;
+                      `}
+                    >
+                      <p>{comment.message}</p>
+                      <p>
+                        {comment.userName} ·{' '}
+                        {formatDistanceToNow(new Date(comment.date))}
+                      </p>
+                      {isCreator(comment.userId) && (
+                        <ProductCreator>Creator</ProductCreator>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+
             <aside>
               <p>
                 Publicated by {creator.name} from {company}.

@@ -159,15 +159,37 @@ const Product = () => {
   }
 
   /**
+   * @name: deleteProduct.
+   * @description: delete a product from the database.
+   * @param: none.
+   * @return: none.
+   */
+  const deleteProduct = async () => {
+    if (!user || !isCreator(user.uid)) {
+      return router.push('/login')
+    }
+
+    try {
+      await firebase.db.collection('products').doc(id).delete()
+      router.push('/')
+    } catch (error) {
+      // TODO -> add sweet alert
+      console.log(error)
+    }
+  }
+
+  /**
    * @name: isCreator.
-   * @description: check if the user is the product creator.
-   * @param: event.
+   * @description: check if the authenticated user is the product creator.
+   * @param: product id.
    * @return: none.
    */
   const isCreator = (id) => {
     if (creator.id === id) {
       return true
     }
+
+    return false
   }
 
   return (
@@ -272,6 +294,12 @@ const Product = () => {
               </div>
             </aside>
           </ProductContainer>
+
+          {user && isCreator(user.uid) ? (
+            <Button onClick={deleteProduct} bgColor="true">
+              Delete product
+            </Button>
+          ) : null}
         </div>
       )}
     </Layout>

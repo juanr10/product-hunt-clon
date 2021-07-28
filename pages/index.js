@@ -8,11 +8,12 @@ export default function Home() {
   const { firebase } = useContext(FirebaseContext)
 
   useEffect(() => {
-    const getProducts = () => {}
-    firebase.db
-      .collection('products')
-      .orderBy('created', 'desc')
-      .onSnapshot(snapshotManagement)
+    const getProducts = () => {
+      firebase.db
+        .collection('products')
+        .orderBy('created', 'desc')
+        .onSnapshot(snapshotManagement)
+    }
 
     getProducts()
   }, [])

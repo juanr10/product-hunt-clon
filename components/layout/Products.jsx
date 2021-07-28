@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import Link from 'next/link'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
+// Styled components
 const Item = styled.li`
   padding: 4rem;
   display: flex;

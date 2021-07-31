@@ -6,26 +6,29 @@ const useProducts = (order) => {
   const { firebase } = useContext(FirebaseContext)
 
   useEffect(() => {
-    const getProducts = () => {
-      firebase.db
-        .collection('products')
-        .orderBy(order, 'desc')
-        .onSnapshot(snapshotManagement)
+    let isMounted = true
+
+    const getProducts = async () => {
+      const response = firebase.db.collection('products').orderBy(order, 'desc')
+      const data = await response.get()
+
+      const products = data.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data()
+        }
+      })
+
+      if (isMounted) setProducts(products)
     }
 
     getProducts()
+
+    //Cleanup
+    return () => {
+      isMounted = false
+    }
   }, [])
-
-  function snapshotManagement(snapshot) {
-    const products = snapshot.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      }
-    })
-
-    setProducts(products)
-  }
 
   return {
     products

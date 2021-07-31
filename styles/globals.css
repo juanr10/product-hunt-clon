@@ -17,6 +17,7 @@ a {
 
 .products-list {
   background-color: #f3f3f3;
+  min-height: 100vh;
 }
 .custom-container {
   max-width: 1200px;

@@ -4,6 +4,7 @@ import { FirebaseContext } from '../../firebase'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import Layout from '../../components/layout/Layout'
 import Error404 from '../../components/layout/Error404'
+import Spinner from '../../components/ui/Spinner'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Field, Submit } from '../../components/ui/Form'
@@ -61,8 +62,14 @@ const Product = () => {
     }
   }, [id])
 
-  // TODO: Add spinner
-  if (Object.keys(product).length === 0 && !error) return 'Loading...'
+  if (Object.keys(product).length === 0 && !error) {
+    return (
+      <Layout>
+        <Error404 message="Loading product data. Please wait." />
+        <Spinner />
+      </Layout>
+    )
+  }
 
   const {
     name,
@@ -88,14 +95,13 @@ const Product = () => {
       return router.push('/login')
     }
 
-    const totalVotes = votes + 1
-
     // Check if the user has already voted
     if (voters.includes(user.uid)) {
       return
     }
 
-    // Save voter id
+    // vote management
+    const totalVotes = votes + 1
     const newVoters = [...voters, user.uid]
 
     //DB update
@@ -106,7 +112,8 @@ const Product = () => {
 
     setProduct({
       ...product,
-      votes: totalVotes
+      votes: totalVotes,
+      voters: newVoters
     })
 
     setDbConsult(true) // Refresh product data from db
@@ -185,11 +192,7 @@ const Product = () => {
    * @return: none.
    */
   const isCreator = (id) => {
-    if (creator.id === id) {
-      return true
-    }
-
-    return false
+    return creator.id === id
   }
 
   return (
@@ -243,7 +246,7 @@ const Product = () => {
               </h2>
 
               {comments.length === 0 ? (
-                'There are no comments yet. Be the first to leave one!'
+                'There are no comments yet.'
               ) : (
                 <ul>
                   {comments.map((comment, i) => (

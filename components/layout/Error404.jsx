@@ -7,6 +7,7 @@ const Error404 = ({ message }) => {
       css={css`
         margin-top: 5rem;
         text-align: center;
+        color: var(--gray2);
       `}
     >
       {message}

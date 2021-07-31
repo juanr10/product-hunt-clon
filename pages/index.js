@@ -3,6 +3,7 @@ import useProducts from '../hooks/useProducts'
 import Layout from '../components/layout/Layout'
 import Products from '../components/layout/Products'
 import Error404 from '../components/layout/Error404'
+import Spinner from '../components/ui/Spinner'
 
 export default function Home() {
   const { products } = useProducts('created')
@@ -11,7 +12,10 @@ export default function Home() {
     <div>
       <Layout>
         {products.length === 0 ? (
-          <Error404 message="There is an error loading products. Please try again later." />
+          <>
+            <Error404 message="Loading products. Please wait." />
+            <Spinner />
+          </>
         ) : (
           <div className="products-list">
             <div className="custom-container">

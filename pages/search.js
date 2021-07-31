@@ -18,9 +18,21 @@ const Search = () => {
     const search = q.toLowerCase()
     const filter = products.filter((product) => {
       return (
-        product.name.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search) ||
-        product.company.toLowerCase().includes(search)
+        product.name
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .includes(search) ||
+        product.description
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .includes(search) ||
+        product.company
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .includes(search)
       )
     })
 
